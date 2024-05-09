@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.navigation.NavigationView
 import cr.ac.menufragment.CameraFragment
 import cr.ac.menufragment.ListControlFinancieroFragment
+import cr.ac.una.controlfinancierocamera.EditControlFinancieroFragment
 import cr.ac.una.controlfinanciero.adapter.MovimientoAdapter
 import cr.ac.una.controlfinancierocamera.controller.MovimientoController
 
@@ -67,8 +68,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_gallery -> {
                 title = R.string.menu_gallery
-                fragment= CameraFragment()
-
+                fragment= ListControlFinancieroFragment()
             }
             R.id.nav_manage -> title = R.string.menu_tools
 

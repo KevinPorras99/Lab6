@@ -23,47 +23,46 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import cr.ac.una.controlfinancierocamera.dao.MovimientoDAO
 
-class MovimientoAdapter (context:Context, movimientos:List<Movimiento>):
-    ArrayAdapter<Movimiento>(context,0,movimientos){
-
+class MovimientoAdapter(
+    context: Context,
+    private val movimientos: MutableList<Movimiento>,
+    private val movimientoDao: MovimientoDAO // Añade movimientoDao como un argumento
+) : ArrayAdapter<Movimiento>(context, 0, movimientos) {
 
     @SuppressLint("MissingInflatedId")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-
         var view = LayoutInflater.from(context)
             .inflate(R.layout.list_item, parent, false)
         val monto = view.findViewById<TextView>(R.id.monto)
         val tipo = view.findViewById<TextView>(R.id.tipo)
         val fecha = view.findViewById<TextView>(R.id.fecha)
 
-
         var movimiento = getItem(position)
         monto.text = movimiento?.monto.toString()
         tipo.text = movimiento?.tipo.toString()
         fecha.text = movimiento?.fecha.toString()
 
-
         var bottonDelete = view.findViewById<ImageButton>(R.id.button_delete)
-        bottonDelete.setOnClickListener{
+        bottonDelete.setOnClickListener {
             AlertDialog.Builder(context)
                 .setTitle("Confirmar eliminación")
                 .setMessage("Esta accion es irrebersible, ¿Desea eliminar esta transacción?")
                 .setPositiveButton("Sí") { dialog, which ->
-                   /* val mainActivity = context as MainActivity
-                    GlobalScope.launch(Dispatchers.Main) {
-                        movimiento?.let { it1 -> mainActivity.movimientoController.deleteMovimiento(it1) }
-                        clear()
-                        addAll(mainActivity.movimientoController.listMovimientos())
-                        notifyDataSetChanged()
-                        notifyDataSetChanged()
-                    }*/
+                    val movimiento = getItem(position)
+                    if (movimiento != null) {
+                        removeItem(position)
+                        GlobalScope.launch(Dispatchers.IO) {
+                            movimientoDao.delete(movimiento)
+                        }
+                    }
                 }
                 .setNegativeButton("No", null)
                 .show()
         }
         var bottonUpdate = view.findViewById<ImageButton>(R.id.button_update)
-        bottonUpdate.setOnClickListener{
+        bottonUpdate.setOnClickListener {
             val fragment = EditControlFinancieroFragment()
             val fragmentManager = (context as MainActivity).supportFragmentManager
             val transaction = fragmentManager.beginTransaction()
@@ -75,8 +74,11 @@ class MovimientoAdapter (context:Context, movimientos:List<Movimiento>):
             }
         }
 
-
-
         return view
+    }
+
+    fun removeItem(position: Int) {
+        movimientos.removeAt(position)
+        notifyDataSetChanged()
     }
 }

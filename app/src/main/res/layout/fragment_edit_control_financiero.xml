@@ -27,13 +27,12 @@
             android:id="@+id/saveMovimientoButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="50dp"
-            android:text="Guardar"
-            app:layout_constraintEnd_toStartOf="@+id/exitButton"
-            app:layout_constraintHorizontal_bias="0.5"
+            android:layout_marginStart="96dp"
+            android:text="Insertar"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/captureButton" />
+            app:layout_constraintTop_toBottomOf="@+id/captureButton"
+            app:layout_constraintVertical_bias="0.336" />
 
         <Spinner
             android:id="@+id/tipoMovimientoSpinner"
@@ -61,7 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="12dp"
             android:text="Capturar Imagen"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -117,13 +116,14 @@
             android:id="@+id/exitButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="50dp"
+            android:layout_marginStart="8dp"
             android:text="Salir"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.231"
             app:layout_constraintStart_toEndOf="@+id/saveMovimientoButton"
-            app:layout_constraintTop_toBottomOf="@+id/captureButton" />
+            app:layout_constraintTop_toBottomOf="@+id/captureButton"
+            app:layout_constraintVertical_bias="0.336" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

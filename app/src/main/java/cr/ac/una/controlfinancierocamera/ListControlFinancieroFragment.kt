@@ -65,9 +65,9 @@ class ListControlFinancieroFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.Main) {
             try {
                 val ubicaciones = withContext(Dispatchers.Default) {
-                    movimientoDao.getAll() // Obtener los datos de la base de datos
+                    movimientoDao.getAll()?.filterNotNull()?.toMutableList() ?: mutableListOf() // Obtener los datos de la base de datos
                 }
-                val adapter = MovimientoAdapter(requireContext(), ubicaciones as List<Movimiento>)
+                val adapter = MovimientoAdapter(requireContext(), ubicaciones, movimientoDao)
                 listView.adapter = adapter
             } catch (e: Exception) {
                 // Manejar errores adecuadamente, como mostrar un mensaje de error al usuario
@@ -80,29 +80,6 @@ class ListControlFinancieroFragment : Fragment() {
             insertEntity()
         }
 
-
-
-    /*-----------------------------Para las apis-----------------------
-    lifecycleScope.launch {
-        withContext(Dispatchers.Main) {
-            movimientoController.listMovimientos()
-            val list = view.findViewById<ListView>(R.id.listaMovimientos)
-            adapter = MovimientoAdapter(requireContext(), movimientoController.listMovimientos())
-            list.adapter = adapter
-        }
-    }*/
-
-        /*val listView = view.findViewById<ListView>(R.id.listaMovimientos)
-        // Verificar si la lista de movimientos está vacía antes de realizar la consulta a la base de datos
-        if (listView.adapter == null || (listView.adapter as MovimientoAdapter).isEmpty()) {
-            lifecycleScope.launch {
-                withContext(Dispatchers.Default) {
-                    var ubicaciones = movimientoDao.getAll() as List<Movimiento>
-                    val adapter = MovimientoAdapter(requireContext(), ubicaciones)
-                    listView.adapter = adapter
-                }
-            }
-        }*/
 
     }
 

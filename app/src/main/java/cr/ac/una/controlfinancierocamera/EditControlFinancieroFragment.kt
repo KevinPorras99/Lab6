@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.InputFilter
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -66,7 +67,22 @@ class EditControlFinancieroFragment() : Fragment() {
         lateinit var movimientoDao: MovimientoDAO
         movimientoDao = AppDatabase.getInstance(requireContext()).ubicacionDao()
         var monto = view.findViewById<TextView>(R.id.textMonto)
-        monto.setText(movimientoModificar.monto.toString())
+        monto.text = ""
+
+        monto.filters = arrayOf<InputFilter>(InputFilter { source, start, end, dest, dstart, dend ->
+            if (source.isEmpty()) {
+                return@InputFilter null
+            }
+            val enteringText = source.toString()
+            val resultingText = dest.toString().substring(0, dstart) + enteringText + dest.toString().substring(dend)
+            if (resultingText.contains(".")) {
+                val decimalParts = resultingText.split(".")
+                if (decimalParts.size >= 2 && decimalParts[1].length > 2) {
+                    return@InputFilter ""
+                }
+            }
+            null
+        })
 
 
         imageView = view.findViewById(R.id.imageView)
@@ -139,32 +155,8 @@ class EditControlFinancieroFragment() : Fragment() {
                         fragmentManager?.popBackStack()
                     }
                 }
-                //-----------------------------------Con apis---------------------------------------------
-                /* val actividad = activity as MainActivity
-                GlobalScope.launch(Dispatchers.IO) {
-                    actividad.movimientoController.insertMovimiento(movimiento)
-                    // Regresar al fragmento anterior
-                    val fragmentManager = requireActivity().supportFragmentManager
-                    fragmentManager.popBackStack()*/
 
-            }/*else{
-                val montoNuevo = view.findViewById<TextView>(R.id.textMonto)
-                movimientoModificar.monto = decimales(montoNuevo)
-                val fechaNuevo = view.findViewById<TextView>(R.id.calendario)
-                movimientoModificar.fecha = fecha.text.toString()
-                val tipoNuevo = view.findViewById<Spinner>(R.id.tipoMovimientoSpinner)
-                movimientoModificar.tipo = elementoSeleccionado
-                val imageViewNuevo = view.findViewById<ImageView>(R.id.imageView)
-               /* movimientoModificar.imagen = imageViewNuevo.drawToBitmap()*/
-
-                val actividad = activity as MainActivity
-                GlobalScope.launch(Dispatchers.Main) {
-                    actividad.movimientoController.updateTransaction(movimientoModificar)
-                    // Regresar al fragmento anterior
-                    val fragmentManager = requireActivity().supportFragmentManager
-                    fragmentManager.popBackStack()
-                }
-            }*/
+            }
 
         }
 
